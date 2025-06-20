@@ -1,19 +1,31 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth");
-
 const app = express();
+const connectDB = require("./config/database"); // This will run the database.js file
+const User = require("./models/User");
 
-// Controller for user
-app.get("/user/details", (req, res) => {
-  throw new Error("Demo error");
-  res.json({ name: "Nitin Sahu", age: 25 });
-});
+app.post("/signup", async (req, res) => {
+  const userObj = {
+    firstName: "Diya",
+    lastName: "Sharma",
+    emailId: "diyasharma1905@gmail.com",
+    password: "codewithdiya",
+  };
 
-// Error handling route or simple we can use try catch in all the routes for better approach
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(500).send("Internal server error!!");
+  const user = new User(userObj);
+
+  try {
+    await user.save();
+    res.send("User saved successfully!!");
+  } catch (error) {
+    res.status(400).send("Error in savind the user" + error.message);
   }
 });
 
-app.listen(3000, () => console.log("Server is running at 3000"));
+connectDB()
+  .then(() => {
+    console.log("Database connection established!!");
+    app.listen(3000, () => console.log("Server is running at 3000"));
+  })
+  .catch((err) => {
+    console.error("Database connection failed");
+  });
