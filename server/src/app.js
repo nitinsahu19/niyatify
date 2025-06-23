@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const connectDB = require("./config/database"); // This will run the database.js file
+const connectDB = require("./config/database");
 const User = require("./models/User");
 
 app.use(express.json());
@@ -14,6 +14,7 @@ app.post("/signup", async (req, res) => {
     res.send("User saved successfully!!");
   } catch (error) {
     res.status(400).send("Error in savind the user" + error.message);
+    console.log(error.message);
   }
 });
 
