@@ -18,6 +18,22 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.patch("/user", async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const data = req.body;
+    console.log(data, userId);
+    await User.findByIdAndUpdate({ _id: userId }, data, {
+      returnDocument: "after",
+      runValidators: true,
+    });
+    res.status(201).send("User updated successfully");
+  } catch (error) {
+    res.status(400).send("Updated failed: ", error.message);
+    console.log(error.message);
+  }
+});
+
 connectDB()
   .then(() => {
     console.log("Database connection established!!");
