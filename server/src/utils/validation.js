@@ -1,11 +1,11 @@
 import validator from 'validator'
 
 export const validateSignUp = (req) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, emailId, password } = req.body;
 
   if (!firstName || !lastName) {
     throw new Error("Name is not valid");
-  } else if (!validator.isEmail(email)) {
+  } else if (!validator.isEmail(emailId)) {
     throw new Error("Enter valid email");
   } else {
     if (!validator.isStrongPassword(password)) {

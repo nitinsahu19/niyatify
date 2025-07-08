@@ -11,13 +11,14 @@ app.post("/signup", async (req, res) => {
   try {
     // Validation
     validateSignUp(req);
+    console.log("herer arrived")
 
-    const { firstName, lastName, emailId, password } = req.body;
+    const { firstName, lastName, emailId, password, gender, age } = req.body;
 
     // Encrypt password
-    const passwordHash = bcrypt.hash(password, 10);
-    const userEmail = req.body.emailId;
-    const isPresent = await User.findOne({ email: userEmail });
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log("hash password => ", passwordHash)
+    const isPresent = await User.findOne({ email: emailId });
     if (isPresent) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -26,6 +27,8 @@ app.post("/signup", async (req, res) => {
       firstName,
       lastName,
       emailId,
+      age,
+      gender,
       password: passwordHash,
     });
 
