@@ -2,13 +2,33 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/User");
+const { validateSignUp } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
-
   try {
+    // Validation
+    validateSignUp(req);
+
+    const { firstName, lastName, emailId, password } = req.body;
+
+    // Encrypt password
+    const passwordHash = bcrypt.hash(password, 10);
+    const userEmail = req.body.emailId;
+    const isPresent = await User.findOne({ email: userEmail });
+    if (isPresent) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
+
     await user.save();
     res.status(201).send("User saved successfully!!");
   } catch (error) {
@@ -27,7 +47,6 @@ app.patch("/user/:userId", async (req, res) => {
     const isAllowed = Object.keys(data).every((key) =>
       ALLOWED_UPDATES.includes(key)
     );
-    console.log(data);
 
     if (!isAllowed) {
       throw new Error(
