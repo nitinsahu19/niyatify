@@ -4,8 +4,11 @@ const connectDB = require("./config/database");
 const User = require("./models/User");
 const { validateSignUp } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -17,7 +20,6 @@ app.post("/signup", async (req, res) => {
 
     // Encrypt password
     const passwordHash = await bcrypt.hash(password, 10);
-    console.log("hash password => ", passwordHash);
     const isPresent = await User.findOne({ email: emailId });
     if (isPresent) {
       return res.status(400).json({ message: "Email already exists" });
@@ -36,7 +38,6 @@ app.post("/signup", async (req, res) => {
     res.status(201).send("User saved successfully!!");
   } catch (error) {
     res.status(400).send("Error in savind the user" + error.message);
-    console.log(error.message);
   }
 });
 
@@ -72,7 +73,6 @@ app.patch("/user/:userId", async (req, res) => {
   }
 });
 
-// Login api
 app.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
@@ -80,16 +80,46 @@ app.post("/login", async (req, res) => {
     const user = await User.findOne({ emailId: emailId });
 
     if (!user) {
-      throw new Error("Mail error");
+      throw new Error("Invalid credentials");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("password eror");
-    } else res.send("Login successfull");
+      throw new Error("Invaling credentials");
+    } else {
+      // Creating a JWT token
+      const token = jwt.sign({ _id: user._id }, "niyatify@143");
+      res.cookie("token", token);
+      res.send("Login successfull");
+    }
   } catch (error) {
     res.status(400).send(error.message);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const { token } = req.cookies;
+
+    // Verifying the token
+    const decodedValue = jwt.verify(token, "niyatify@143");
+
+    const { _id } = decodedValue;
+
+    const user = await User.findOne({ _id });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!decodedValue) {
+      throw new Error("Invalid token or expired");
+    } else {
+      res.send(user);
+    }
+  } catch (error) {
+    res.send("ERROR" + error.message);
   }
 });
 
