@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+
 const adminAuth = (req, res, next) => {
   console.log("Auth validation is running");
   const token = "xyza";
@@ -12,14 +15,20 @@ const adminAuth = (req, res, next) => {
 };
 
 const userAuth = (req, res, next) => {
-  console.log("User auth is running");
-  const token = "okk";
-  const isAuthorized = token === "okk";
+  const { token } = req.cookies;
 
-  if (!isAuthorized) {
-    res.status(401).send("User is not authorized");
+  if (!token) {
+    throw new Error("Kindly login first");
   } else {
-    next();
+    const decodedValue = jwt.verify(token, "niyatify@143");
+
+    const { _id } = decodedValue;
+
+    const user = User.findOne(_id);
+
+    req.user = user;
+
+    console.log(user);
   }
 };
 

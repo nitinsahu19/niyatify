@@ -6,6 +6,7 @@ const { validateSignUp } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -89,7 +90,9 @@ app.post("/login", async (req, res) => {
       throw new Error("Invaling credentials");
     } else {
       // Creating a JWT token
-      const token = jwt.sign({ _id: user._id }, "niyatify@143");
+      const token = jwt.sign({ _id: user._id }, "niyatify@143", {
+        expiresIn: "7d",
+      });
       res.cookie("token", token);
       res.send("Login successfull");
     }
@@ -98,28 +101,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const { token } = req.cookies;
-
-    // Verifying the token
-    const decodedValue = jwt.verify(token, "niyatify@143");
-
-    const { _id } = decodedValue;
-
-    const user = await User.findOne({ _id });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    if (!decodedValue) {
-      throw new Error("Invalid token or expired");
-    } else {
-      res.send(user);
-    }
+    res.send("Profile page");
   } catch (error) {
-    res.send("ERROR" + error.message);
+    res.status(400).send("ERROR" + error.message);
   }
 });
 
