@@ -15,7 +15,6 @@ app.post("/signup", async (req, res) => {
   try {
     // Validation
     validateSignUp(req);
-    console.log("herer arrived");
 
     const { firstName, lastName, emailId, password, gender, age } = req.body;
 
@@ -84,15 +83,13 @@ app.post("/login", async (req, res) => {
       throw new Error("Invalid credentials");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.verifyPassword(password, user);
 
     if (!isPasswordValid) {
       throw new Error("Invaling credentials");
     } else {
-      // Creating a JWT token
-      const token = jwt.sign({ _id: user._id }, "niyatify@143", {
-        expiresIn: "7d",
-      });
+      const token = await user.getJWT();
+
       res.cookie("token", token);
       res.send("Login successfull");
     }
@@ -103,9 +100,19 @@ app.post("/login", async (req, res) => {
 
 app.get("/profile", userAuth, async (req, res) => {
   try {
-    res.send("Profile page");
+    const user = req.user;
+    res.send(user);
   } catch (error) {
     res.status(400).send("ERROR" + error.message);
+  }
+});
+
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.send(`${user.firstName} sending the connection request...`);
+  } catch (error) {
+    res.status(400).send("ERROR -> " + error.message);
   }
 });
 
