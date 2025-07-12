@@ -1,4 +1,4 @@
-import validator from 'validator'
+import validator from "validator";
 
 export const validateSignUp = (req) => {
   const { firstName, lastName, emailId, password } = req.body;
@@ -12,4 +12,14 @@ export const validateSignUp = (req) => {
       throw new Error("Enter an strong password");
     }
   }
+};
+
+export const validateUpdateRequestData = (req) => {
+  const allowedField = ["gender", "about", "skills"];
+
+  const isAccepted = Object.keys(req.body).every((key) =>
+    allowedField.includes(key)
+  );
+
+  return isAccepted;
 };
