@@ -79,8 +79,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-
 // Schema methods
 userSchema.methods.getJWT = async function () {
   const user = this; //attaching instance to user
@@ -99,6 +97,6 @@ userSchema.methods.verifyPassword = async function (inputPassword) {
   return isPasswordValid;
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 module.exports = User;

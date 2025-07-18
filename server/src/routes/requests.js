@@ -1,8 +1,8 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequestModel = require("../models/connectionRequests");
-const User = require("../models/User");
 const ConnectionRequest = require("../models/connectionRequests");
+const User = require("../models/user");
 const requestRouter = express.Router();
 
 requestRouter.post(
@@ -16,7 +16,6 @@ requestRouter.post(
       const toUser = await User.findOne({ _id: toUserId });
 
       // If toUserId is not valid
-      console.log(toUser);
       if (!toUser) {
         throw new Error("User not found");
       }
@@ -54,6 +53,43 @@ requestRouter.post(
         } ${status} ${status === "interested" ? "in" : ""} ${toUser.firstName}`,
         data,
       });
+    } catch (error) {
+      res.status(400).send("ERROR -> " + error.message);
+    }
+  }
+);
+
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const { status, requestId } = req.params;
+      const logginUser = req.user;
+
+      const allowedStatus = ["accepted", "rejected"];
+
+      if (!allowedStatus.includes(status)) {
+        res.status(400).json({ message: "status is not of valid type" });
+      }
+
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        status: "interested",
+        toUserId: logginUser._id,
+      });
+
+      if (!connectionRequest) {
+        throw new Error("No such request found");
+      }
+
+      connectionRequest.status = status;
+
+      const data = await connectionRequest.save();
+
+      res
+        .status(200)
+        .json({ message: `Connection request -> ${status}`, data });
     } catch (error) {
       res.status(400).send("ERROR -> " + error.message);
     }
