@@ -16,5 +16,5 @@
 
 ## userRouter
 - GET /user/connections
-- GET /user/requests
+- GET /user/requests/received
 - get /user/feed  -> gets you profiles of other persons on platform to like or ignore

@@ -1,6 +1,8 @@
 const express = require("express");
 const User = require("../models/User");
 const userRouter = express.Router();
+const { userAuth } = require("../middlewares/auth");
+const ConnectionRequest = require("../models/connectionRequests");
 
 userRouter.patch("/user/:userId", async (req, res) => {
   try {
@@ -31,6 +33,21 @@ userRouter.patch("/user/:userId", async (req, res) => {
     res.status(201).send("User updated successfully");
   } catch (error) {
     res.status(400).send("Updated failed: " + error.message);
+  }
+});
+
+userRouter.get("/user/requests/received", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      toUserId: loggedInUser._id,
+      status: "interested",
+    }).populate("fromUserId", ["firstName", "lastName"])
+
+    res.send(connectionRequests);
+  } catch (error) {
+    res.status(400).send("ERROR -> " + error.message);
   }
 });
 
