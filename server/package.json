@@ -1,5 +1,5 @@
 {
-  "name": "niyatify",
+  "name": "niyatify-backend",
   "version": "1.0.0",
   "description": "A platform where developers match, collaborate, and build together!",
   "main": "index.js",
