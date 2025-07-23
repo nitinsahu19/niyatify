@@ -82,4 +82,34 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
   // res.json({ data: connections });
 });
 
+userRouter.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const connections = [];
+    // Akshay will not see the cards of ->  his own, whom he ignored or send request already, already a connection with akshay
+    const fetchedConnections = await ConnectionRequest.find({
+      $or: [
+        {
+          fromUserId: loggedInUser._id,
+          status: { $in: ["accepted", "rejected", "ignored", "interested"] },
+        },
+        {
+          toUserId: loggedInUser._id,
+          status: { $in: ["accepted", "rejected", "ignored", "interested"] },
+        },
+      ],
+    });
+
+    connections.push(fetchedConnections);
+    connections.push(loggedInUser);
+
+    console.log(connections);
+    // const users = await User.aggregate([{}]);
+
+    res.send("ok");
+  } catch (error) {
+    res.send({ message: error.message });
+  }
+});
+
 module.exports = userRouter;
