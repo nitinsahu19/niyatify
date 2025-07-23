@@ -3,6 +3,7 @@ const User = require("../models/User");
 const userRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequests");
+const mongoose = require("mongoose");
 
 const SAFE_DATA = [
   "firstName",
@@ -79,36 +80,54 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
   );
 
   res.json({ data });
-  // res.json({ data: connections });
 });
 
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
-    const loggedInUser = req.user;
-    const connections = [];
-    // Akshay will not see the cards of ->  his own, whom he ignored or send request already, already a connection with akshay
-    const fetchedConnections = await ConnectionRequest.find({
-      $or: [
-        {
-          fromUserId: loggedInUser._id,
-          status: { $in: ["accepted", "rejected", "ignored", "interested"] },
-        },
-        {
-          toUserId: loggedInUser._id,
-          status: { $in: ["accepted", "rejected", "ignored", "interested"] },
-        },
-      ],
+    const loggedInUserId = req.user._id;
+    const page = req.query.page || 1;
+    let limit = req.query.limit || 10;
+
+    // Sanitizing limit from max data request
+    limit = limit > 50 ? 50 : limit;
+
+
+    // Step 1: Find all relevant connections (from or to the user)
+    const connections = await ConnectionRequest.find({
+      $or: [{ fromUserId: loggedInUserId }, { toUserId: loggedInUserId }],
+      status: { $in: ["accepted", "rejected", "ignored", "interested"] },
     });
 
-    connections.push(fetchedConnections);
-    connections.push(loggedInUser);
+    // Step 2: Extract connected user IDs
+    const connectionIds = connections.map((item) => {
+      const from = item.fromUserId.toString();
+      const to = item.toUserId.toString();
+      return from === loggedInUserId.toString() ? to : from;
+    });
 
-    console.log(connections);
-    // const users = await User.aggregate([{}]);
+    // Step 3: Add logged-in user ID to list to exclude themselves too
+    connectionIds.push(loggedInUserId.toString());
 
-    res.send("ok");
+    // Step 4: Convert all IDs to ObjectId for consistency
+    const objectIdsToExclude = connectionIds.map(
+      (id) => new mongoose.Types.ObjectId(id)
+    );
+
+    // Step 5: Query only users not in connectionIds
+    const users = await User.find(
+      { _id: { $nin: objectIdsToExclude } },
+      "firstName lastName emailId gender skills" // project only what’s needed
+    )
+      .skip((page - 1) * limit >= 0 ? (page - 1) * limit : 0)
+      .limit(limit);
+
+    // Step 6: Send response
+    res.status(200).json({
+      message: "Data fetched successfully",
+      data: users,
+    });
   } catch (error) {
-    res.send({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
