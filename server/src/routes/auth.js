@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../models/User");
+const User = require("../models/user.js");
 const { validateSignUp } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 
@@ -10,7 +10,8 @@ authRouter.post("/signup", async (req, res) => {
     // Validation
     validateSignUp(req);
 
-    const { firstName, lastName, emailId, password, gender, age } = req.body;
+    const { firstName, lastName, emailId, password, gender, age, photoUrl } =
+      req.body;
 
     // Encrypt password
     const passwordHash = await bcrypt.hash(password, 10);
@@ -26,6 +27,7 @@ authRouter.post("/signup", async (req, res) => {
       age,
       gender,
       password: passwordHash,
+      photoUrl,
     });
 
     await user.save();
@@ -38,7 +40,6 @@ authRouter.post("/signup", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
-    console.log(emailId, password)
 
     const user = await User.findOne({ emailId: emailId });
 

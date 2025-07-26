@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { handleLogin } from "../../api/loginApi";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../Redux/actions/authActions";
 
 const Login = () => {
-  const [email, setEmail] = useState("jaggu@gmail.com");
-  const [password, setPassword] = useState("Jaggu@123");
+  const [email, setEmail] = useState("nex@gmail.com");
+  const [password, setPassword] = useState("Nex@123S");
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-col justify-center items-center my-8">
@@ -43,7 +45,7 @@ const Login = () => {
           <div className="card-actions justify-center">
             <button
               className="btn btn-primary flex"
-              onClick={() => handleLogin(email, password)}
+              onClick={() => dispatch(loginUser(email, password))}
             >
               Login
             </button>
