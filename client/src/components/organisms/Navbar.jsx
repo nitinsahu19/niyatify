@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const user = useSelector((store) => store.user.user);
@@ -18,7 +19,7 @@ export const Navbar = () => {
           <div className="dropdown dropdown-end mx-4">
             {/* Welcome text */}
             <span className="text-sm font-medium text-white  mx-4">
-              Welcome, {user?.user?.firstName}
+              Welcome, {user?.firstName}
             </span>
 
             {/* Avatar dropdown */}
@@ -28,10 +29,7 @@ export const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
-                  alt={user?.user?.firstName?.slice(0, 1)}
-                  src={user?.user?.photoUrl}
-                />
+                <img alt={user?.firstName?.slice(0, 1)} src={user?.photoUrl} />
               </div>
             </div>
             {/* List of profile options */}
@@ -40,16 +38,16 @@ export const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a className="justify-between">
+                <Link to="/profile" className="justify-between">
                   Profile
                   <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/settings">Settings</Link>
               </li>
               <li>
-                <a>Logout</a>
+                <Link to="/logout">Logout</Link>
               </li>
             </ul>
           </div>

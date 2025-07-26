@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/actions/authActions";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("nex@gmail.com");
   const [password, setPassword] = useState("Nex@123S");
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   return (
     <div className="flex flex-col justify-center items-center my-8">
@@ -45,7 +47,7 @@ const Login = () => {
           <div className="card-actions justify-center">
             <button
               className="btn btn-primary flex"
-              onClick={() => dispatch(loginUser(email, password))}
+              onClick={() => dispatch(loginUser(email, password, navigate))}
             >
               Login
             </button>
