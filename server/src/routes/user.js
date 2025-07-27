@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../models/User");
+const User = require("../models/user");
 const userRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequests");
@@ -91,7 +91,6 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     // Sanitizing limit from max data request
     limit = limit > 50 ? 50 : limit;
 
-
     // Step 1: Find all relevant connections (from or to the user)
     const connections = await ConnectionRequest.find({
       $or: [{ fromUserId: loggedInUserId }, { toUserId: loggedInUserId }],
@@ -116,7 +115,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     // Step 5: Query only users not in connectionIds
     const users = await User.find(
       { _id: { $nin: objectIdsToExclude } },
-      "firstName lastName emailId gender skills" // project only what’s needed
+      "firstName lastName emailId gender age skills about" // project only what’s needed
     )
       .skip((page - 1) * limit >= 0 ? (page - 1) * limit : 0)
       .limit(limit);

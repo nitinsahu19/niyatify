@@ -66,11 +66,12 @@ const userSchema = new mongoose.Schema(
           throw new Error("Invalid photo url : *" + value);
         }
       },
+      default: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png",
     },
     about: {
       trim: true,
       type: String,
-      default: "Hey's there, I am using Node.js",
+      default: "Hey there! I'm using Niyatify.",
     },
     skills: {
       type: [String],
