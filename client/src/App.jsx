@@ -11,8 +11,8 @@ const App = () => {
         <Route index element={<Feed />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<Login />} />
       </Route>
+      <Route path="*" element={<Login />} />
     </Routes>
   );
 };

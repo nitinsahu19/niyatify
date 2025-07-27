@@ -10,11 +10,9 @@ const Layout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(user);
   useEffect(() => {
     try {
       if (user) {
-        console.log(user);
         navigate("/");
       }
       dispatch(getUser(navigate));

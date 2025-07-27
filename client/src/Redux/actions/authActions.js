@@ -1,5 +1,6 @@
 import axios from "axios";
-import { addUser } from "../reducers/userSlice";
+import { addUser, removeUser } from "../reducers/userSlice";
+import { setLoginError } from "../reducers/authSlice";
 
 export const loginUser = (emailId, password, navigate) => {
   return async (dispatch) => {
@@ -16,7 +17,25 @@ export const loginUser = (emailId, password, navigate) => {
       navigate("/");
       return response?.data?.user;
     } catch (error) {
+      dispatch(setLoginError(error.response.data));
       console.error("Login failed: : ", error.message);
+    }
+  };
+};
+
+export const logoutUser = (navigate) => {
+  return async (dispatch) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/logout`,
+        {},
+        { withCredentials: true }
+      );
+
+      dispatch(removeUser());
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
     }
   };
 };
