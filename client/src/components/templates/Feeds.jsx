@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserCard } from "../molecules/user/UserCard";
+import { UserCard } from "../molecules/UserCard";
 import { getFeeds } from "../../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFeedsData } from "../../redux/reducers/feedsSlice";

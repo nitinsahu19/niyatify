@@ -12,6 +12,8 @@ const SAFE_DATA = [
   "photoUrl",
   "about",
   "skills",
+  "gender",
+  "emailId",
 ];
 
 userRouter.patch("/user/:userId", async (req, res) => {

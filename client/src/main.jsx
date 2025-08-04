@@ -5,13 +5,18 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import reduxStore from "./Redux/store/store.js";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={reduxStore}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={reduxStore}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
   </StrictMode>
 );
