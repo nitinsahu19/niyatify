@@ -1,2 +1,22 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* class to hide the scrollbar visibility */
+html {
+  scrollbar-width: none;
+}
+body {
+  -ms-overflow-style: none;
+}
+body::-webkit-scrollbar,
+body::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* custom class to hide scrollbar */
+.scroll-hidden::-webkit-scrollbar {
+  scrollbar-width: none;
+  display: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
