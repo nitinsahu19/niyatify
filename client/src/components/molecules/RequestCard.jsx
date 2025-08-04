@@ -1,3 +1,7 @@
+import { useDispatch } from "react-redux";
+import { acceptRequest } from "../../redux/actions/userActions";
+import { useQueryClient } from "@tanstack/react-query";
+
 export const RequestCard = ({
   name,
   about,
@@ -6,7 +10,16 @@ export const RequestCard = ({
   gender,
   src,
   skills,
+  id,
 }) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const handleAccept = ({ id, queryClient }) => {
+    console.log("fucntion called");
+    dispatch(acceptRequest({ id, queryClient }));
+  };
+
   return (
     <div className="card bg-base-300 w-80 shadow-sm  flex justify-center items-center p-4 gap-4">
       <figure>
@@ -28,7 +41,12 @@ export const RequestCard = ({
         </div>
 
         <div className="card-actions flex justify-center items-center">
-          <button className="btn btn-primary">Decline</button>
+          <button
+            onClick={() => handleAccept(id, queryClient)}
+            className="btn btn-primary"
+          >
+            Decline
+          </button>
           <button className="btn btn-secondary">Accept</button>
         </div>
       </div>

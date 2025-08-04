@@ -34,6 +34,8 @@ const Requests = () => {
 
       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {data?.map((request, index) => {
+          const _id = request?._id;
+          {/* console.log("id for the request -> ", _id) */}
           const {
             about,
             emailId,
@@ -47,6 +49,7 @@ const Requests = () => {
 
           return (
             <RequestCard
+              id={_id}
               key={index}
               name={firstName + " " + lastName}
               src={photoUrl}

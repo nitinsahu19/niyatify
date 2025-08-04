@@ -52,3 +52,25 @@ export const updateUser = (body) => {
     }
   };
 };
+
+export const acceptRequest = ({ id, queryClient }) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/request/review/accepted/${id}`,
+        { withCredentials: true }
+      );
+      console.log(response, "response from actions");
+      dispatch(
+        showNotification({
+          type: "success",
+          message: error?.response?.data?.message || "Something went wrong",
+        })
+      );
+      queryClient.invalidateQueries("requests");
+    } catch (error) {
+      dispatch(showNotification({ type: "error", message: error?.message }));
+      console.error("ERROR -> ", error?.message);
+    }
+  };
+};
