@@ -2,13 +2,12 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addRequests, setError } from "../../Redux/reducers/requestSlice";
 import { useQuery } from "@tanstack/react-query";
-import { RequestCard } from "../molecules/RequestCard";
 import { InvitationTabs } from "../molecules/InvitatationTab";
 
-const Requests = () => {
+export const SentRequests = () => {
   const dispatch = useDispatch();
 
-  const fetchRequests = async () => {
+  const fetchSendRequests = async () => {
     try {
       const response = await axios(
         `${import.meta.env.VITE_LOCAL_DOMAIN}/user/requests/received`,
@@ -23,8 +22,8 @@ const Requests = () => {
   };
 
   const { data } = useQuery({
-    queryKey: ["requests"],
-    queryFn: fetchRequests,
+    queryKey: ["sentRequests"],
+    queryFn: fetchSendRequests,
     refetchOnWindowFocus: false,
   });
 
@@ -32,35 +31,15 @@ const Requests = () => {
     <section className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col items-center justify-center">
       <InvitationTabs />
 
-      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data?.map((request, index) => {
-          const {
-            about,
-            emailId,
-            age,
-            gender,
-            photoUrl,
-            skills,
-            firstName,
-            lastName,
-          } = request?.fromUserId;
-
-          return (
-            <RequestCard
-              key={index}
-              name={firstName + " " + lastName}
-              src={photoUrl}
-              about={about}
-              age={age}
-              skills={skills}
-              gender={gender}
-              email={emailId}
-            />
-          );
-        })}
+      <div className="text-center text-gray-500 max-w-md">
+        <p className="text-lg mb-2">
+          🚧 This page is currently under development.
+        </p>
+        <p className="text-sm">
+          We're working hard to bring this feature to life. Please check back
+          soon!
+        </p>
       </div>
     </section>
   );
 };
-
-export default Requests;

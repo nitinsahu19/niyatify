@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { validateResponse } from "../../utils/helpers";
 import { useDispatch } from "react-redux";
 import { addConnections } from "../../Redux/reducers/connectionsSlice";
 import { ConnectionCard } from "../molecules/ConnectionCard";
+import { InvitationTabs } from "../molecules/InvitatationTab";
 
 const Connections = () => {
   const dispatch = useDispatch();
+
   const fetchConnections = async () => {
     try {
       const response = await axios.get(
@@ -47,6 +48,8 @@ const Connections = () => {
 
   return (
     <section className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col items-center justify-center">
+      <InvitationTabs />
+
       <h1 className="text-2xl font-semibold mb-6 text-center">
         Your Connections
       </h1>

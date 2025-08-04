@@ -2,7 +2,7 @@ export const ConnectionCard = ({ src, about, gender, email, name }) => {
   return (
     <div className="card bg-base-300 w-80 shadow-sm  flex justify-center items-center p-4">
       <figure>
-        <img src={src} alt={"User Image"} className="w-18 h-18" />
+        <img src={src} alt={"User Image"} className="w-18 h-18 rounded-full" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
