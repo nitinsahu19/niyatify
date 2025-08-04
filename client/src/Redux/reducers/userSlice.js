@@ -17,5 +17,7 @@ const userSlice = createSlice({
   },
 });
 
+export const selectUserProfile = (store) => store.user.user;
+
 export const userReducer = userSlice.reducer;
 export const { addUser, removeUser } = userSlice.actions;

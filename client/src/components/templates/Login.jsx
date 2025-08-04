@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, logoutUser } from "../../Redux/actions/authActions";
+import { loginUser, logoutUser } from "../../redux/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("jaggu@gmail.com");
-  const [password, setPassword] = useState("Jaggu@123");
+  const [email, setEmail] = useState("meera@gmail.com");
+  const [password, setPassword] = useState("Meera@123");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");

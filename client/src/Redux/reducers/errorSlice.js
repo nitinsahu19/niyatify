@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const errorInitialState = {
   feedsError: "",
+  updateError: "",
 };
 
 const errorSlice = createSlice({
@@ -11,11 +12,15 @@ const errorSlice = createSlice({
     setFeedsError: (state, action) => {
       state.feedsError = action.payload;
     },
+    setUpdateError: (state, action) => {
+      state.updateError = action.payload;
+    },
   },
 });
 
 // Selected errors
 export const selectFeedsError = (store) => store?.error?.feedsError;
+export const selectUpdateError = (store) => store?.error?.updateError;
 
-export const { setFeedsError } = errorSlice.actions;
+export const { setFeedsError, setUpdateError } = errorSlice.actions;
 export const errorReducer = errorSlice.reducer;

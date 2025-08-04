@@ -15,7 +15,15 @@ export const validateSignUp = (req) => {
 };
 
 export const validateUpdateRequestData = (req) => {
-  const allowedField = ["gender", "about", "skills"];
+  const allowedField = [
+    "about",
+    "skills",
+    "firstName",
+    "lastName",
+    "photoUrl",
+    "gender",
+    "emailId",
+  ];
 
   const isAccepted = Object.keys(req.body).every((key) =>
     allowedField.includes(key)

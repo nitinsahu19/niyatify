@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutUser } from "../../Redux/actions/authActions";
+import { logoutUser } from "../../redux/actions/authActions";
 
 export const Navbar = () => {
   const user = useSelector((store) => store.user.user);
