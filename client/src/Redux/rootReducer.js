@@ -4,6 +4,7 @@ import { authReducer } from "./reducers/authSlice";
 import { feedReducer } from "../redux/reducers/feedsSlice";
 import { errorReducer } from "../redux/reducers/errorSlice";
 import { connectionsReducer } from "./reducers/connectionsSlice";
+import { requestReducer } from "./reducers/requestSlice";
 
 export const rootReducer = combineReducers({
   user: userReducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   feeds: feedReducer,
   error: errorReducer,
   connections: connectionsReducer,
+  request: requestReducer,
 });

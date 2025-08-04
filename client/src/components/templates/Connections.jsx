@@ -33,7 +33,6 @@ const Connections = () => {
   //   Side effects
   useEffect(() => {
     if (data) {
-      console.log(data);
       dispatch(addConnections(data));
     }
   }, [data]);
