@@ -4,8 +4,8 @@ import { loginUser, logoutUser } from "../../Redux/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("jaggu@gmail.com");
-  const [password, setPassword] = useState("Jaggu@123");
+  const [email, setEmail] = useState("rakhi@gmail.com");
+  const [password, setPassword] = useState("Rakhi@123");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
