@@ -19,7 +19,6 @@ const UserProfile = () => {
     skills: Array.isArray(user?.skills) ? user.skills.join(", ") : "",
   });
 
-
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -52,10 +51,15 @@ const UserProfile = () => {
               alt="Profile"
             />
           )}
+          {/* name */}
           <h2 className="text-xl font-semibold">
-            {profile.firstName + " " + profile.lastName}
+            {profile?.firstName + " " + profile?.lastName}
           </h2>
-          <p>{profile.emailId}</p>
+
+          {/* Email */}
+          <p>{profile?.emailId}</p>
+
+          {/* gender */}
           <p className="text-gray-500">
             {profile?.gender.slice(0, 1).toUpperCase() +
               profile?.gender.slice(1)}
@@ -127,7 +131,7 @@ const UserProfile = () => {
                 <input
                   type="text"
                   name="about"
-                  value={profile.about}
+                  value={profile?.about}
                   onChange={handleChange}
                   className="mt-1 w-full border rounded p-2"
                 />
@@ -169,14 +173,18 @@ const UserProfile = () => {
             </form>
           ) : (
             <div className="text-base-content space-y-2">
-              <p>
-                <span className="font-medium text-secondary">About:</span>{" "}
-                {profile.about}
-              </p>
-              <p>
-                <span className="font-medium text-secondary">Skills:</span>{" "}
-                {profile.skills}
-              </p>
+              {profile?.about && (
+                <p>
+                  <span className="font-medium text-secondary">About:</span>{" "}
+                  {profile.about}
+                </p>
+              )}
+              {profile?.skills && (
+                <p>
+                  <span className="font-medium text-secondary">Skills:</span>{" "}
+                  {profile.skills}
+                </p>
+              )}
             </div>
           )}
         </div>

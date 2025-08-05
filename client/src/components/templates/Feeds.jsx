@@ -8,12 +8,8 @@ const Feeds = () => {
   const { data, refetch } = useQuery({
     queryKey: ["feeds"],
     queryFn: () => dispatch(getFeeds()),
-    // select: (data) => [...data],
-
     refetchOnWindowFocus: false,
   });
-
-  console.log(data);
 
   return <>{data && <UserCard user={data[0]} refetch={refetch} />}</>;
 };
