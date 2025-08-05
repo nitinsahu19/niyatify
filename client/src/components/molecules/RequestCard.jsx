@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { acceptRequest } from "../../redux/actions/userActions";
+import { acceptRequest, declineRequest } from "../../redux/actions/userActions";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const RequestCard = ({
@@ -18,6 +18,12 @@ export const RequestCard = ({
   const handleAccept = ({ id, queryClient }) => {
     if (id) {
       dispatch(acceptRequest({ id, queryClient }));
+    }
+  };
+
+  const handleReject = ({ id, queryClient }) => {
+    if (id) {
+      dispatch(declineRequest({ id, queryClient }));
     }
   };
 
@@ -42,7 +48,12 @@ export const RequestCard = ({
         </div>
 
         <div className="card-actions flex justify-center items-center">
-          <button className="btn btn-primary">Decline</button>
+          <button
+            onClick={() => handleReject({ id, queryClient })}
+            className="btn btn-primary"
+          >
+            Decline
+          </button>
           <button
             onClick={() => handleAccept({ id, queryClient })}
             className="btn btn-secondary"

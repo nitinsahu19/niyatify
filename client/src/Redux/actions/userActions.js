@@ -67,7 +67,6 @@ export const acceptRequest = ({ id, queryClient }) => {
       );
 
       queryClient.invalidateQueries("requests");
-      console.log(response.message);
 
       dispatch(
         showNotification({
@@ -78,6 +77,41 @@ export const acceptRequest = ({ id, queryClient }) => {
     } catch (error) {
       dispatch(showNotification({ type: "error", message: error?.message }));
       console.error("ERROR -> ", error?.message);
+    }
+  };
+};
+
+export const declineRequest = ({ id, queryClient }) => {
+  return async (dispatch) => {
+    try {
+      if (!id) {
+        return;
+      }
+      const response = await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/request/review/rejected/${id}`,
+        {},
+        { withCredentials: true }
+      );
+
+      queryClient.invalidateQueries("requests");
+
+      dispatch(
+        showNotification({
+          type: "success",
+          message: response?.data?.message || "Request rejected successfully",
+        })
+      );
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        dispatch(
+          showNotification({
+            type: "error",
+            message: "Unauthorized access denied!!",
+          })
+        );
+        return;
+      }
+      dispatch(showNotification({ type: "error", message: error?.message }));
     }
   };
 };
