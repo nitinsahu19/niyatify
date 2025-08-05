@@ -13,8 +13,8 @@ export const getFeeds = () => {
           withCredentials: true,
         }
       );
-
-      dispatch(setFeedsData(feeds.data.data));
+      dispatch(setFeedsData(feeds?.data?.data));
+      return feeds?.data?.data || [];
     } catch (error) {
       dispatch(setFeedsError(error.data.message));
       console.error(error.data.message);
@@ -99,6 +99,70 @@ export const declineRequest = ({ id, queryClient }) => {
         showNotification({
           type: "success",
           message: response?.data?.message || "Request rejected successfully",
+        })
+      );
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        dispatch(
+          showNotification({
+            type: "error",
+            message: "Unauthorized access denied!!",
+          })
+        );
+        return;
+      }
+      dispatch(showNotification({ type: "error", message: error?.message }));
+    }
+  };
+};
+
+export const sendRequest = ({ id, queryClient }) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/request/send/interested/${id}`,
+        {},
+        { withCredentials: true }
+      );
+
+      queryClient.invalidateQueries("feeds");
+
+      dispatch(
+        showNotification({
+          type: "success",
+          message: response?.data?.message || "Request send successfully!!",
+        })
+      );
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        dispatch(
+          showNotification({
+            type: "error",
+            message: "Unauthorized access denied!!",
+          })
+        );
+        return;
+      }
+      dispatch(showNotification({ type: "error", message: error?.message }));
+    }
+  };
+};
+
+export const ignoreRequest = ({ id, queryClient }) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/request/send/ignored/${id}`,
+        {},
+        { withCredentials: true }
+      );
+
+      queryClient.invalidateQueries("feeds");
+
+      dispatch(
+        showNotification({
+          type: "success",
+          message: response?.data?.message || "Request ignored successfully!",
         })
       );
     } catch (error) {
