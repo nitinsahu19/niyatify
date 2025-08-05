@@ -14,7 +14,6 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
-    console.log(req.body);
     const isAccepted = validateUpdateRequestData(req);
 
     if (!isAccepted) {

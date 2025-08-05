@@ -33,34 +33,39 @@ const Requests = () => {
       <InvitationTabs />
 
       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data?.map((request, index) => {
-          const _id = request?._id;
-          {/* console.log("id for the request -> ", _id) */}
-          const {
-            about,
-            emailId,
-            age,
-            gender,
-            photoUrl,
-            skills,
-            firstName,
-            lastName,
-          } = request?.fromUserId;
+        {data && data.length > 0 ? (
+          data.map((request, index) => {
+            const _id = request?._id;
+            const {
+              about,
+              emailId,
+              age,
+              gender,
+              photoUrl,
+              skills,
+              firstName,
+              lastName,
+            } = request?.fromUserId;
 
-          return (
-            <RequestCard
-              id={_id}
-              key={index}
-              name={firstName + " " + lastName}
-              src={photoUrl}
-              about={about}
-              age={age}
-              skills={skills}
-              gender={gender}
-              email={emailId}
-            />
-          );
-        })}
+            return (
+              <RequestCard
+                id={_id}
+                key={index}
+                name={firstName + " " + lastName}
+                src={photoUrl}
+                about={about}
+                age={age}
+                skills={skills}
+                gender={gender}
+                email={emailId}
+              />
+            );
+          })
+        ) : (
+          <div className="col-span-full text-center text-lg font-semibold text-gray-500">
+            No requests found.
+          </div>
+        )}
       </div>
     </section>
   );

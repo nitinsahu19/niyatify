@@ -38,14 +38,6 @@ const Connections = () => {
     }
   }, [data]);
 
-  if (!data?.length) {
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-500 text-lg">
-        No connections found.
-      </div>
-    );
-  }
-
   return (
     <section className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col items-center justify-center">
       <InvitationTabs />
@@ -54,23 +46,29 @@ const Connections = () => {
         Your Connections
       </h1>
 
-      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data?.map((connection, index) => {
-          const { photoUrl, about, gender, emailId, firstName, lastName } =
-            connection;
+      {data?.length > 0 ? (
+        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {data?.map((connection, index) => {
+            const { photoUrl, about, gender, emailId, firstName, lastName } =
+              connection;
 
-          return (
-            <ConnectionCard
-              key={index}
-              name={firstName + " " + lastName}
-              src={photoUrl}
-              about={about}
-              gender={gender}
-              email={emailId}
-            />
-          );
-        })}
-      </div>
+            return (
+              <ConnectionCard
+                key={index}
+                name={firstName + " " + lastName}
+                src={photoUrl}
+                about={about}
+                gender={gender}
+                email={emailId}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center h-64 text-gray-500 text-lg">
+          No connections found.
+        </div>
+      )}
     </section>
   );
 };

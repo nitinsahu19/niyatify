@@ -56,18 +56,25 @@ export const updateUser = (body) => {
 export const acceptRequest = ({ id, queryClient }) => {
   return async (dispatch) => {
     try {
+      if (!id) {
+        return;
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_LOCAL_DOMAIN}/request/review/accepted/${id}`,
+        {},
         { withCredentials: true }
       );
-      console.log(response, "response from actions");
+
+      queryClient.invalidateQueries("requests");
+      console.log(response.message);
+
       dispatch(
         showNotification({
           type: "success",
-          message: error?.response?.data?.message || "Something went wrong",
+          message: response?.data?.message || "Request accepted succesfully",
         })
       );
-      queryClient.invalidateQueries("requests");
     } catch (error) {
       dispatch(showNotification({ type: "error", message: error?.message }));
       console.error("ERROR -> ", error?.message);

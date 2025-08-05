@@ -16,16 +16,17 @@ export const RequestCard = ({
   const queryClient = useQueryClient();
 
   const handleAccept = ({ id, queryClient }) => {
-    console.log("fucntion called");
-    dispatch(acceptRequest({ id, queryClient }));
+    if (id) {
+      dispatch(acceptRequest({ id, queryClient }));
+    }
   };
 
   return (
-    <div className="card bg-base-300 w-80 shadow-sm  flex justify-center items-center p-4 gap-4">
+    <div className="card bg-base-300 w-80 shadow-sm flex justify-center items-center p-4">
       <figure>
         <img src={src} alt={"User Image"} className="w-18 h-18 rounded-full" />
       </figure>
-      <div className="card-body">
+      <div className="card-body flex justify-center items-center gap-5">
         <h2 className="card-title">
           {name}
           <div className="badge badge-secondary">NEW</div>
@@ -41,13 +42,13 @@ export const RequestCard = ({
         </div>
 
         <div className="card-actions flex justify-center items-center">
+          <button className="btn btn-primary">Decline</button>
           <button
-            onClick={() => handleAccept(id, queryClient)}
-            className="btn btn-primary"
+            onClick={() => handleAccept({ id, queryClient })}
+            className="btn btn-secondary"
           >
-            Decline
+            Accept
           </button>
-          <button className="btn btn-secondary">Accept</button>
         </div>
       </div>
     </div>
