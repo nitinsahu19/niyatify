@@ -15,6 +15,7 @@ export const loginUser = (emailId, password, navigate) => {
         { withCredentials: true }
       );
       dispatch(addUser(response?.data?.user));
+      localStorage.setItem("user", JSON.stringify(response?.data?.user));
       navigate("/");
       return response?.data?.user;
     } catch (error) {
@@ -34,6 +35,7 @@ export const logoutUser = (navigate) => {
       );
 
       dispatch(removeUser());
+      localStorage.removeItem("user");
       navigate("/login");
     } catch (error) {
       console.log(error);
