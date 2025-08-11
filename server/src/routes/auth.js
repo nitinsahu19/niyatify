@@ -20,12 +20,6 @@ authRouter.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const token = await user.getJWT();
-
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 8 * 3600000),
-    });
-
     const user = new User({
       firstName,
       lastName,
@@ -37,6 +31,12 @@ authRouter.post("/signup", async (req, res) => {
     });
 
     await user.save();
+
+    const token = await user.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
     res.status(201).send("User saved successfully!!");
   } catch (error) {
     res.status(400).send("Error in savind the user" + error.message);

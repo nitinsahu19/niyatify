@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
         values: ["male", "female", "others"],
         message: `Selected gender, {VALUE} is invalid`,
       },
-      // validate(value) {
+      // validat(value) {
       //   if (!["male", "female", "others"].includes(value)) {
       //     throw new Error("Not valid gender");
       //   }
