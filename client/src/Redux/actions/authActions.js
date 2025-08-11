@@ -1,6 +1,7 @@
 import axios from "axios";
 import { addUser, removeUser } from "../reducers/userSlice";
 import { setLoginError } from "../reducers/authSlice";
+import { showNotification } from "../reducers/notificationSlice";
 
 export const loginUser = (emailId, password, navigate) => {
   return async (dispatch) => {
@@ -54,6 +55,37 @@ export const getUser = (navigate) => {
     } catch (error) {
       navigate("/login");
       console.error("Profile fetching failed: : ", error.message);
+    }
+  };
+};
+
+export const signUpUser = (data, navigate) => {
+  return async (dispatch) => {
+    try {
+      const { firstName, lastName, email, password } = data;
+      const response = await axios.post(
+        `${import.meta.env.VITE_LOCAL_DOMAIN}/signup`,
+        { firstName, lastName, emailId: email, password },
+        { withCredentials: true }
+      );
+
+      if (!response) return;
+
+      dispatch(
+        showNotification({
+          type: "success",
+          message: response.data.message || "User registered successfully!",
+        })
+      );
+      navigate("/");
+    } catch (error) {
+      dispatch(
+        showNotification({
+          type: "error",
+          message: error.message || "Internal server error!",
+        })
+      );
+      console.error("Error in adding new user: ", error.message);
     }
   };
 };

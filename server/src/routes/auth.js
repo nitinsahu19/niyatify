@@ -20,6 +20,12 @@ authRouter.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
+    const token = await user.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+
     const user = new User({
       firstName,
       lastName,

@@ -4,18 +4,29 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 export const UserCard = ({ user, refetch }) => {
-  // Local animation state
   const [animation, setAnimation] = useState("");
   const [bgColor, setBgColor] = useState("");
-
-  const { _id } = user;
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
+  if (!user?._id) {
+    return (
+      <div className="flex justify-center items-center h-96">
+        <div className="text-center text-gray-500">
+          <h2 className="text-xl font-semibold">No more feeds available</h2>
+          <p className="mt-2">Please check back later or try refreshing.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { _id } = user;
+
   const handleInterested = () => {
-    setAnimation("translate-x-full opacity-0"); // right swipe
+    setAnimation("translate-x-full opacity-0");
     setBgColor("bg-green-100");
-    refetch();
+
+    dispatch(removeFeed(_id));
 
     setTimeout(() => {
       dispatch(sendRequest({ id: _id, queryClient }));
@@ -29,7 +40,6 @@ export const UserCard = ({ user, refetch }) => {
     setTimeout(() => {
       dispatch(ignoreRequest({ id: _id, queryClient }));
     }, 300);
-    refetch();
   };
 
   return (
