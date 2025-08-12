@@ -71,7 +71,7 @@ export const signUpUser = (data, navigate) => {
         { withCredentials: true }
       );
 
-      if (!response) return;
+      dispatch(addUser(response.data.data));
 
       dispatch(
         showNotification({
