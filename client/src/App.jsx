@@ -7,6 +7,7 @@ import Requests from "./components/templates/Requests";
 import UserProfile from "./components/templates/UserProfile";
 import { Notificaiton } from "./components/molecules/Notification";
 import { SentRequests } from "./components/templates/SentRequests";
+import Chat from "./components/templates/Chat";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/connections" element={<Connections />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/sendRequest" element={<SentRequests />} />
+          <Route path="/chat/:id" element={<Chat />} />
         </Route>
         <Route path="*" element={<Login />} />
       </Routes>

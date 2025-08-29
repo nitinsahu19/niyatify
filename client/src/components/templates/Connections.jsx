@@ -49,11 +49,19 @@ const Connections = () => {
       {data?.length > 0 ? (
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {data?.map((connection, index) => {
-            const { photoUrl, about, gender, emailId, firstName, lastName } =
-              connection;
+            const {
+              photoUrl,
+              about,
+              gender,
+              emailId,
+              firstName,
+              lastName,
+              _id,
+            } = connection;
 
             return (
               <ConnectionCard
+                id={_id}
                 key={index}
                 name={firstName + " " + lastName}
                 src={photoUrl}
