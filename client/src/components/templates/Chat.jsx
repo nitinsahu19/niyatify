@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { createSocketConnection } from "../../utils/socket";
 
 const Chat = () => {
   const { id } = useParams();
@@ -40,6 +43,22 @@ const Chat = () => {
         "https://imgs.search.brave.com/uEDscvT9LGdST9h4u5kwkZEerVUfxTYmr8xm5Jj-Xzs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9waG90/b3NidWxsLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyNC8w/NS8xMDAwMDYwNDQ1/LmpwZw",
     },
   ]);
+  const user = useSelector((store) => store.user);
+
+  const userId = user?._id;
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const socket = createSocketConnection();
+
+    socket.emit("join-chat", { userId, id });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [userId, id]);
+
   return (
     <div className="flex justify-center h-[70dvh]">
       {/* Chat container */}
@@ -48,8 +67,8 @@ const Chat = () => {
         {/* Message continer */}
         <div className="h-[60vh] overflow-auto px-2">
           {messages &&
-            messages?.map((chat) => (
-              <div className="">
+            messages?.map((chat, index) => (
+              <div key={index} className="">
                 {/* From user */}
                 {chat?.user === "other" && (
                   <div className="chat chat-start">

@@ -31,7 +31,7 @@ const Layout = () => {
     <>
       <Navbar />
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
